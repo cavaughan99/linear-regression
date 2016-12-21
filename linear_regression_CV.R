@@ -17,7 +17,7 @@
 # set the working directory
 # setwd("~/Desktop/Rstatistics")
 # setwd("C:/Users/dataclass/Desktop/Rstatistics")
-setwd("/Users/cavaughan99/Documents/personal stuff/R course")
+setwd("..\R course")
 
 ##   You might also start by listing the files in your working directory
 
