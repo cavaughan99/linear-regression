@@ -1,16 +1,11 @@
 ## Set working directory
 ## ─────────────────────────
 
-##   It is often helpful to start your R session by setting your working
-##   directory so you don't have to type the full path names to your data
-##   and other files
-
 # set the working directory
 # setwd("~/Desktop/Rstatistics")
-# setwd("C:/Users/dataclass/Desktop/Rstatistics")
-setwd("..\R course")
+# setwd("C:/Users/Rstatistics")
+setwd("..\R work")
 
-##   You might also start by listing the files in your working directory
 
 getwd() # where am I?
 list.files("dataSets") # files in the dataSets folder
@@ -31,7 +26,7 @@ tail(states.info, 8)
 ## Examine the data before fitting models
 ## ──────────────────────────────────────────
 
-##   Start by examining the data to check for problems.
+##  Examine the data to check for problems.
 
 # summary of expense and csat columns, all rows
 sts.ex.sat <- subset(states.data, select = c("expense", "csat"))
@@ -48,14 +43,7 @@ cor(sts.ex.sat)
 # scatter plot of expense vs csat
 plot(sts.ex.sat)
 
-## Linear regression example
-## ─────────────────────────────
-
-##   • Linear regression models can be fit with the `lm()' function
-##   • For example, we can use `lm' to predict SAT scores based on
-##     per-pupal expenditures:
-
-# Fit our regression model
+# Fit linear regression model
 sat.mod <- lm(csat ~ expense, # regression formula
               data=states.data) # data set
 # Summarize and print the results
@@ -75,11 +63,6 @@ methods(class = class(sat.mod))[1:9]
 
 confint(sat.mod)
 # hist(residuals(sat.mod))
-
-## Linear Regression Assumptions
-## ─────────────────────────────────
-
-##   
 
 ##   • Investigate assumptions of OLS regression visually by plotting model:
 
