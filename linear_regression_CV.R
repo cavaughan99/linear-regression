@@ -1,12 +1,3 @@
-#  Introduction
-## ══════════════
-
-#   • Learning objectives:
-##     • Learn the R formula interface
-##     • Specify factor contrasts to test specific hypotheses
-##     • Perform model comparisons
-##     • Run and interpret variety of regression models in R
-
 ## Set working directory
 ## ─────────────────────────
 
@@ -70,29 +61,17 @@ sat.mod <- lm(csat ~ expense, # regression formula
 # Summarize and print the results
 summary(sat.mod) # show regression coefficients table
 
-## Why is the association between expense and SAT scores /negative/?
-## ─────────────────────────────────────────────────────────────────────
-
-##   Many people find it surprising that the per-capita expenditure on
-##   students is negatively related to SAT scores. The beauty of multiple
-##   regression is that we can try to pull these apart. What would the
-##   association between expense and SAT scores be if there were no
-##   difference among the states in the percentage of students taking the
-##   SAT?
-
 summary(lm(csat ~ expense + percent, data = states.data))
 
 ## The lm class and methods
 ## ────────────────────────────
 
-##   OK, we fit our model. Now what?
+
 ##   • Examine the model object:
 
 class(sat.mod)
 names(sat.mod)
 methods(class = class(sat.mod))[1:9]
-
-##   • Use function methods to get more information about the fit
 
 confint(sat.mod)
 # hist(residuals(sat.mod))
@@ -100,23 +79,17 @@ confint(sat.mod)
 ## Linear Regression Assumptions
 ## ─────────────────────────────────
 
-##   • Ordinary least squares regression relies on several assumptions,
-##     including that the residuals are normally distributed and
-##     homoscedastic, the errors are independent and the relationships are
-##     linear.
+##   
 
-##   • Investigate these assumptions visually by plotting your model:
+##   • Investigate assumptions of OLS regression visually by plotting model:
 
 par(mar = c(4, 4, 2, 2), mfrow = c(1, 2)) #optional
 plot(sat.mod, which = c(1, 2)) # "which" argument optional
 
-## Comparing models
+## Evaluate models to predict SAT scores over and above expense from congressional voting patterns.
 ## ────────────────────
 
-##   Do congressional voting patterns predict SAT scores over and above
-##   expense? Fit two models and compare them:
-
-# fit another model, adding house and senate as predictors
+# fit a model, adding house and senate as predictors
 sat.voting.mod <-  lm(csat ~ expense + house + senate,
                       data = na.omit(states.data))
 
@@ -126,14 +99,11 @@ sat.mod <- update(sat.mod, data=na.omit(states.data))
 anova(sat.mod, sat.voting.mod)
 coef(summary(sat.voting.mod))
 
-## Exercise: least squares regression
-## ────────────────────────────────────────
-
-##   Use the /states.rds/ data set. Fit a model predicting energy consumed
+##   Fit a model predicting energy consumed
 ##   per capita (energy) from the percentage of residents living in
 ##   metropolitan areas (metro). 
 
-##   1. Examine/plot the data before fitting the model
+##   Examine/plot the data before fitting the model
 
 ##examine summary stats for energy and metro
 attach(states.data)
@@ -150,7 +120,7 @@ plot(metro, energy)
 ##These may affect the results of the regression model, so it may be worth running the model with and without
 ## these states to determine whether/how the model is affected. 
 
-##   2. Print and interpret the model `summary'
+##   Print and interpret the model `summary'
 
 energyreg = lm(energy ~ metro, data=states.data)
 summary(energyreg)
@@ -189,7 +159,7 @@ summary(energyregtrim)
 ##the percentage of residents residing in metro areas. 
 
 
-##   3. `plot' the model to look for deviations from modeling assumptions
+##   `plot' the model to look for deviations from modeling assumptions
 
 ##I also examined the model object for the regression model with all states included and created plots to 
 ##examine assumptions of linear regression:
@@ -212,13 +182,9 @@ plot(energyreg, which = c(1, 2)) # "which" argument optional
 ##that had particularly high levels of per capita energy consumption (i.e., > 500), and their energy consumption was
 ##not predicted very well by metro. 
 
-##   Select one or more additional predictors to add to your model and
-##   repeat steps 1-3. Is this model significantly better than the model
-##   with /metro/ as the only predictor?
-
 ##Add "income" to the model as a predictor.
 
-##   1. Examine/plot the data before fitting the model
+##   Examine/plot the data before fitting the model
 
 plot(income, energy)
 
@@ -228,7 +194,7 @@ cor(income, energy, use = "complete.obs", method = c("pearson"))
 ##In general, there appears to be a weak, negative correlation between income and energy 
 ##(as income increases, per capita energy consumption decreases).
 
-##   2. Print and interpret the model `summary'
+##   Print and interpret the model `summary'
 
 energyreg2 <- lm(energy ~ metro + income, data=states.data)
 summary(energyreg2)
@@ -242,7 +208,7 @@ anova(energyreg, energyreg2)
 ##in the model), and, not surprisingly, model fit did not change significantly with the addition of income, F(1, 47) = .23, p = .64.
 ##Thus, income was not a significant predictor of energy consumption while adjusting for the percentage of residents in metro areas. 
 
-##   3. `plot' the model to look for deviations from modeling assumptions
+##   `plot' the model to look for deviations from modeling assumptions
 
 ##examine residuals to determine whether they conform to the normal distribution
 hist(residuals(energyreg2))
@@ -262,25 +228,14 @@ plot(energyreg, which = c(1, 2)) # "which" argument optional
 ## Modeling interactions
 ## ─────────────────────────
 
-##   Interactions allow us assess the extent to which the association
-##   between one predictor and the outcome depends on a second predictor.
-##   For example: Does the association between expense and SAT scores
-##   depend on the median income in the state?
-
-  #Add the interaction to the model
+  #Add an interaction to the model
 sat.expense.by.percent <- lm(csat ~ expense*income,
                              data=states.data) 
 #Show the results
   coef(summary(sat.expense.by.percent)) # show regression coefficients table
 
-## Regression with categorical predictors
-## ──────────────────────────────────────────
+## predict SAT scores from region
 
-##   Let's try to predict SAT scores from region, a categorical variable.
-##   Note that you must make sure R does not think your categorical
-##   variable is numeric.
-
-# make sure R knows region is categorical
 str(states.data$region)
 states.data$region <- factor(states.data$region)
 #Add region to the model
@@ -289,17 +244,6 @@ sat.region <- lm(csat ~ region,
 #Show the results
 coef(summary(sat.region)) # show regression coefficients table
 anova(sat.region) # show ANOVA table
-
-##   Again, *make sure to tell R which variables are categorical by
-##   converting them to factors!*
-
-## Setting factor reference groups and contrasts
-## ─────────────────────────────────────────────────
-
-##   In the previous example we use the default contrasts for region. The
-##   default in R is treatment contrasts, with the first level as the
-##   reference. We can change the reference group or use another coding
-##   scheme using the `C' function.
 
 # print default contrasts
 contrasts(states.data$region)
@@ -310,23 +254,14 @@ coef(summary(lm(csat ~ C(region, base=4),
 coef(summary(lm(csat ~ C(region, contr.helmert),
                 data=states.data)))
 
-##   See also `?contrasts', `?contr.treatment', and `?relevel'.
-
-## Exercise: interactions and factors
-## ────────────────────────────────────────
-
-##   Use the states data set.
-
-##   1. Add on to the regression equation that you created in exercise 1 by
-##      generating an interaction term and testing the interaction.
+##   Test interaction between metro and density.
 
 energyreg3 <- lm(energy ~ metro*density, data=states.data)
 coefficients(summary(energyreg3))
 
 ##Results: Metro did not interact significantly with density to predict per capita energy consumption, Beta = .01, std error = .01, p = .15.
 
-##   2. Try adding region to the model. Are there significant differences
-##      across the four regions?
+##   Add region to the model.
 
 # make sure R knows region is categorical
 str(region)
