@@ -1,6 +1,6 @@
 # linear-regression
 
-Linear_regression_CV.R: R script file containing code requested in exercises and interpretations of results
+Linear_regression_CV.R: R script file containing code for linear regression 
 
 states data file 
 
